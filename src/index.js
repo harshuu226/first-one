@@ -1,15 +1,17 @@
 import { app } from "./app.js";
 import { DB_NAME } from "./constants.js";
 import dotenv from "dotenv";
+import connectDB from "./db/index.js";
 
 
 dotenv.config();
 
 
+
 // Define and start server
 const startServer = async () => {
   try {
-    console.log("Connecting to:", `${process.env.MONGODB_URL}/${DB_NAME}`);
+    await connectDB(process.env.MONGODB_URL, DB_NAME);
     console.log("✅ MongoDB connected successfully");
 
     app.listen(process.env.PORT, () => {

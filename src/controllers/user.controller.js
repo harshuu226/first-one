@@ -1,6 +1,6 @@
 import {asyncHandler} from "../utils/asyncHandler.js"
 import {ApiError} from "../utils/ApiError.js"
-import { user } from "../models/user.model.js"
+import { User } from "../models/user.model.js"
 import {uploadOncloudinary} from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 
@@ -29,11 +29,11 @@ const registerUser = asyncHandler( async (req, res) => {
         throw new ApiError(400, "all feild are required")
     }
 
-    const existeduser = user.findOne({
+    const existedUser = await User.findOne({
         $or: [{username},{email}]
-    })
+    });
 
-    if (existeduser) {
+    if (existedUser) {
         throw new ApiError(409, "user already exist")
     }
 
@@ -51,7 +51,7 @@ const registerUser = asyncHandler( async (req, res) => {
         throw new ApiError(400, "avatar is required")
     }
 
-    const user = await user.create({
+    const userData = await User.create({
         fullName,
         avatar: avatar.url,
         coverImage: coverImage?.url || "",
@@ -60,7 +60,7 @@ const registerUser = asyncHandler( async (req, res) => {
         username: username.toLowercase
     })
 
-    const createduser =await user.findById(user._id).select(
+    const createduser =await User.findById(User._id).select(
         "-password -refreshtoken"
     )
 
