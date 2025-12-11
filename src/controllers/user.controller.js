@@ -16,18 +16,27 @@ const registerUser = asyncHandler( async (req, res) => {
     // check for user creation 
     // return res
 
+
+    console.log("Uploaded files:", req.files);
+
     const {fullName, password, username, email} = req.body
-    console.log("email:", email)
-    console.log("fullName:", fullName)
-    console.log("password:", password)
-    console.log("username:", username)
+
+    // if (
+    //     [fullName, email, password,username].some((feild) => 
+    // String(feild || "").trim() === "")
+
+
+    // ) {
+    //     throw new ApiError(400, "all feild are required")
+    // }
 
     if (
-        [fullName, email, password,username].some((feild) => 
-    feild?.trim() === "")
-    ) {
-        throw new ApiError(400, "all feild are required")
+        [fullName, email, password, username].some(feild =>
+        String(feild || "").trim() === ""
+    )) {
+            throw new ApiError(400, "All fields are required");
     }
+
 
     const existedUser = await User.findOne({
         $or: [{username},{email}]
@@ -37,30 +46,30 @@ const registerUser = asyncHandler( async (req, res) => {
         throw new ApiError(409, "user already exist")
     }
 
-    const avatarLocalPath = req.files?.avatar[0]?.path;
-    const coverImageLocalPath = req.files?.coverImage[0]?.path;
+    const avatarLocalPath = req.files?.avatar?.[0]?.path;
+    const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
 
-    if (!avatarLocalPath) {
-        throw new ApiError(400, "avatar is required")
-    }
+    // if (!avatarLocalPath) {
+    //     throw new ApiError(400, "avatar is required")
+    // }
 
-    const avatar = await uploadOncloudinary(avatarLocalPath)
+    // const avatar = await uploadOncloudinary(avatarLocalPath)
     const coverImage = await uploadOncloudinary(coverImageLocalPath)
 
-    if (!avatar) {
-        throw new ApiError(400, "avatar is required")
-    }
+    // if (!avatar) {
+    //     throw new ApiError(400, "avatar is required")
+    // }
 
     const userData = await User.create({
         fullName,
-        avatar: avatar.url,
+        // avatar: avatar.url,
         coverImage: coverImage?.url || "",
         email,
         password,
-        username: username.toLowercase
+        username: username.toLowerCase()
     })
 
-    const createduser =await User.findById(User._id).select(
+    const createduser =await User.findById(userData._id).select(
         "-password -refreshtoken"
     )
 

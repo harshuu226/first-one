@@ -27,10 +27,10 @@ const userSchema = new Schema ({
         index: true
     },
 
-    avatar: {
-        type: String,
-        required: true
-    },
+    // avatar: {
+    //     type: String,
+    //     required: 
+    // },
 
     coverImage: {
         type: String
