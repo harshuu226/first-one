@@ -21,14 +21,6 @@ const registerUser = asyncHandler( async (req, res) => {
 
     const {fullName, password, username, email} = req.body
 
-    // if (
-    //     [fullName, email, password,username].some((feild) => 
-    // String(feild || "").trim() === "")
-
-
-    // ) {
-    //     throw new ApiError(400, "all feild are required")
-    // }
 
     if (
         [fullName, email, password, username].some(feild =>

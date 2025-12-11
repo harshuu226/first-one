@@ -1,0 +1,1 @@
+ // const avatarLocalPath = req.files?.avatar?.[0]?.path;
