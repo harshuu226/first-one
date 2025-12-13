@@ -21,6 +21,9 @@ const registerUser = asyncHandler( async (req, res) => {
 
     const {fullName, password, username, email} = req.body
 
+    
+
+
 
     if (
         [fullName, email, password, username].some(feild =>
@@ -38,24 +41,32 @@ const registerUser = asyncHandler( async (req, res) => {
         throw new ApiError(409, "user already exist")
     }
 
-    // const avatarLocalPath = req.files?.avatar?.[0]?.path;
-    const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
 
-    // if (!avatarLocalPath) {
-    //     throw new ApiError(400, "avatar is required")
-    // }
 
-    // const avatar = await uploadOncloudinary(avatarLocalPath)
-    const coverImage = await uploadOncloudinary(coverImageLocalPath)
+    
+    const avatarLocalPath = req.files?.avatar?.[0]?.path; 
+    const coverImageLocalPath = req.files?.coverImage?.[0]?.path; 
 
-    // if (!avatar) {
-    //     throw new ApiError(400, "avatar is required")
-    // }
+    let avatarUrl = ""; 
+    let coverImageUrl = ""; 
+
+    
+    const avatar = await uploadOncloudinary(avatarLocalPath); 
+    avatarUrl = avatar?.secure_url || ""; 
+
+    if (!avatar) {
+        throw new ApiError(400, "avatar is required")
+    }
+
+    if (coverImageLocalPath) { 
+        const coverImage = await uploadOncloudinary(coverImageLocalPath); 
+        coverImageUrl = coverImage?.secure_url || ""; 
+    }
 
     const userData = await User.create({
         fullName,
-        // avatar: avatar.url,
-        coverImage: coverImage?.url || "",
+        avatar: avatarUrl,
+        coverImage: coverImageUrl || "",
         email,
         password,
         username: username.toLowerCase()
@@ -74,4 +85,13 @@ const registerUser = asyncHandler( async (req, res) => {
     )
 })
 
+const loginUser = asyncHandler( async(req, res) => {
+    // get details from the user
+    // check username or email matching or not
+    // check password is matching or not
+    // give acess token
+
+})
 export {registerUser}
+
+
