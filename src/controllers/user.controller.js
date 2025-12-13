@@ -58,9 +58,11 @@ const registerUser = asyncHandler( async (req, res) => {
         throw new ApiError(400, "avatar is required")
     }
 
-    if (coverImageLocalPath) { 
-        const coverImage = await uploadOncloudinary(coverImageLocalPath); 
-        coverImageUrl = coverImage?.secure_url || ""; 
+    const coverImage = await uploadOncloudinary(coverImageLocalPath); 
+    coverImageUrl = coverImage?.secure_url || ""; 
+    
+    if (!coverImage) {
+        throw new ApiError(400, "cover is required")
     }
 
     const userData = await User.create({
