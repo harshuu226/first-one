@@ -1,12 +1,9 @@
-import { app } from "./app.js";
-import { DB_NAME } from "./constants.js";
 import dotenv from "dotenv";
+dotenv.config();
+
+import { app } from "./app.js";
 import connectDB from "./db/index.js";
-
-
-dotenv.config({
-  path: './.env'
-});
+import { DB_NAME } from "./constants.js";
 
 
 

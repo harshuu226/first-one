@@ -17,32 +17,6 @@ export const upload = multer({ storage, })
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // import multer from "multer";
 // import path from "path";
 // import { fileURLToPath } from "url";
