@@ -1,7 +1,11 @@
 import { Router } from "express";
-import {registerUser, loginUser, logout, refreshAccessToken, changePassword, 
-    getCurrentUser, updateAccountdetails, updateAvatar, 
-    updateCoverImage, getUserchannelprofile, watchHistory} from "../controllers/user.controller.js";
+import {
+    registerUser, loginUser, logout, 
+    refreshAccessToken, changePassword, 
+    getCurrentUser, updateAccountdetails, 
+    updateAvatar, updateCoverImage, 
+    getUserchannelprofile, watchHistory
+} from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middlewares.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
@@ -30,18 +34,18 @@ router.route("/logout").post(verifyJWT, logout)
 
 router.route("/refreshToken").post(refreshAccessToken)
 
-router.route("/change-password").post(changePassword)
+router.route("/change-password").post(verifyJWT, changePassword)
 
-router.route("/CurrentUser").get(getCurrentUser)
+router.route("/CurrentUser").get(verifyJWT, getCurrentUser)
 
-router.route("/Accountdetails").post(updateAccountdetails)
+router.route("/Accountdetails").patch(verifyJWT, updateAccountdetails)
 
-router.route("/Avatar").post(updateAvatar)
+router.route("/Avatar").patch(verifyJWT, upload.single("avatar"), updateAvatar)
 
-router.route("/CoverImage").patch(updateCoverImage)
+router.route("/coverImage").patch(verifyJWT, upload.single("coverImage"), updateCoverImage)
 
-router.route("/channelprofile").post(getUserchannelprofile)
+router.route("/c/:username").get(verifyJWT, getUserchannelprofile)
 
-router.route("/watchHistory").post(watchHistory)
+router.route("/watchHistory").get(verifyJWT, watchHistory)
 
 export default router
